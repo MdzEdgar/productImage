@@ -1,3 +1,4 @@
 requests~=2.30.0
 Pillow~=9.5.0
 python-dotenv~=1.0.0
+mysql-connector-python~=8.0.33
