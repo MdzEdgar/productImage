@@ -26,6 +26,14 @@ def download_images(sku_in, url_in):
         print(f'No image for {sku_in}.')
 
 
+def generate_images(sku_in, multiple_in):
+    sku_fix = sku_in.replace('/', '-') + '4'
+
+    if not (os.path.isfile('images/' + sku_fix)):
+        print(f'{sku_fix} doesn\'t exist')
+    else:
+        print(sku_fix, multiple_in)
+
 create_directory()
 
 port = int(config['DB_PORT'])
@@ -45,7 +53,7 @@ except mariadb.Error as err:
 
 cursor = connection.cursor()
 
-cursor.execute(f'SELECT codigo, multiplo, imagen FROM {table} WHERE multiplo > ? LIMIT 10', (1, ))
+cursor.execute(f'SELECT codigo, multiplo, imagen FROM {table} WHERE multiplo > ? LIMIT 1', (1, ))
 
 resultCursor = cursor.fetchall()
 
@@ -54,4 +62,4 @@ connection.close()
 
 for sku, multiple, url in resultCursor:
     download_images(sku, url)
-
+    generate_images(sku, multiple)
