@@ -4,13 +4,17 @@ import os
 import time
 import requests
 import mariadb
+from PIL import Image, ImageDraw, ImageFont
 
 config = dotenv_values(".env")
 
 
-def create_directory():
+def create_directories():
     if not (os.path.exists('images')):
         os.makedirs('images')
+
+    if not (os.path.exists('processed')):
+        os.makedirs('processed')
 
 
 def download_images(sku_in, url_in):
@@ -27,14 +31,26 @@ def download_images(sku_in, url_in):
 
 
 def generate_images(sku_in, multiple_in):
-    sku_fix = sku_in.replace('/', '-') + '4'
+    sku_fix = sku_in.replace('/', '-')
+    filename = 'images/' + sku_fix + '.jpg'
 
-    if not (os.path.isfile('images/' + sku_fix)):
+    if not (os.path.isfile(filename)):
         print(f'{sku_fix} doesn\'t exist')
     else:
         print(sku_fix, multiple_in)
+        original = Image.open(filename)
+        editable = ImageDraw.Draw(original)
 
-create_directory()
+        quantities = str(multiple_in)
+        subtext = 'Piezas'
+        text = quantities + '\n' + subtext
+        font = ImageFont.load_default()
+
+        editable.text((140, 100), text, fill='black')
+        original.show()
+
+
+create_directories()
 
 port = int(config['DB_PORT'])
 table = config['DB_TABLE']
