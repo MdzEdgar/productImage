@@ -38,19 +38,18 @@ def generate_images(sku_in, multiple_in):
     if not (os.path.isfile(filename)):
         print(f'{sku_fix} doesn\'t exist')
     else:
-        print(sku_fix, multiple_in)
         original = Image.open(filename)
         editable = ImageDraw.Draw(original)
 
         quantities = str(multiple_in)
         subtext = 'Piezas'
         text = quantities + '\n' + subtext
-        font = ImageFont.truetype('Ubuntu-M.ttf', 84)
+        font = ImageFont.truetype('Ubuntu-M.ttf', 54)
 
-        textwidth, textheight = editable.textsize(text, font)
+        textwidth, textheight = editable.textsize(text, font) # noqa
         width, height = original.size
-        x = width - (textwidth + 50)
-        y = 80
+        x = width - (textwidth + 45)
+        y = 25
 
         editable.text((x, y), text, fill="black", font=font, align="center")
         original.save(newfile)
