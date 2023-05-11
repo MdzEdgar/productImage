@@ -75,7 +75,7 @@ except mariadb.Error as err:
 
 cursor = connection.cursor()
 
-cursor.execute(f'SELECT codigo, multiplo, imagen FROM {table} WHERE multiplo > ? LIMIT 1', (1, ))
+cursor.execute(f'SELECT codigo, multiplo, imagen FROM {table} WHERE multiplo > ? ', (1, ))
 
 resultCursor = cursor.fetchall()
 
