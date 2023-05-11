@@ -1,3 +1,4 @@
+import warnings
 from dotenv import dotenv_values
 import sys
 import os
@@ -6,6 +7,7 @@ import requests
 import mariadb
 from PIL import Image, ImageDraw, ImageFont
 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 config = dotenv_values(".env")
 
 
