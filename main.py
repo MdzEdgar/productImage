@@ -33,6 +33,7 @@ def download_images(sku_in, url_in):
 def generate_images(sku_in, multiple_in):
     sku_fix = sku_in.replace('/', '-')
     filename = 'images/' + sku_fix + '.jpg'
+    newfile = 'processed/' + sku_fix + '.jpg'
 
     if not (os.path.isfile(filename)):
         print(f'{sku_fix} doesn\'t exist')
@@ -44,10 +45,15 @@ def generate_images(sku_in, multiple_in):
         quantities = str(multiple_in)
         subtext = 'Piezas'
         text = quantities + '\n' + subtext
-        font = ImageFont.truetype('Ubuntu-M.ttf', 42)
+        font = ImageFont.truetype('Ubuntu-M.ttf', 84)
 
-        editable.text((140, 100), text, fill='black', font=font)
-        original.show()
+        textwidth, textheight = editable.textsize(text, font)
+        width, height = original.size
+        x = width - (textwidth + 50)
+        y = 80
+
+        editable.text((x, y), text, fill="black", font=font, align="center")
+        original.save(newfile)
 
 
 create_directories()
