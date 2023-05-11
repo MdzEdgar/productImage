@@ -44,9 +44,9 @@ def generate_images(sku_in, multiple_in):
         quantities = str(multiple_in)
         subtext = 'Piezas'
         text = quantities + '\n' + subtext
-        font = ImageFont.load_default()
+        font = ImageFont.truetype('Ubuntu-M.ttf', 42)
 
-        editable.text((140, 100), text, fill='black')
+        editable.text((140, 100), text, fill='black', font=font)
         original.show()
 
 
