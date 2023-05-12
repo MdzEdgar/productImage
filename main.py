@@ -6,6 +6,7 @@ import time
 import requests
 import mariadb
 from PIL import Image, ImageDraw, ImageFont
+import re
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 config = dotenv_values(".env")
@@ -19,17 +20,28 @@ def create_directories():
         os.makedirs('processed')
 
 
+def validate_url(url_in):
+    regex = "^((http|https)://)[-a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)$"
+    r = re.compile(regex)
+
+    result = True if re.search(r, url_in) else False
+    return result
+
+
 def download_images(sku_in, url_in):
     sku_fix = sku_in.replace('/', '-')
 
-    response = requests.get(url_in, stream=True)
-    time.sleep(0.5)
+    if validate_url(url_in):
+        response = requests.get(url_in, stream=True)
+        time.sleep(0.5)
 
-    if response.status_code == 200:
-        with open(f'images/{sku_fix}.jpg', 'wb') as out_file:
-            out_file.write(response.content)
+        if response.status_code == 200:
+            with open(f'images/{sku_fix}.jpg', 'wb') as out_file:
+                out_file.write(response.content)
+        else:
+            print(f'No image for {sku_in}.')
     else:
-        print(f'No image for {sku_in}.')
+        print(f'URL for {sku_in} is not valid: {url_in}')
 
 
 def generate_images(sku_in, multiple_in):
